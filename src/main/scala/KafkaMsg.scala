@@ -1,0 +1,1 @@
+case class KafkaMsg (value: String, key: String, topic: String)

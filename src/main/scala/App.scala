@@ -21,6 +21,8 @@ object App {
       .set("spark.cassandra.auth.password", config.getString("cassandra.password"))
       .set("cassandra.keyspace", config.getString("cassandra.keyspace"))
       .set("spark.scheduler.mode", config.getString("spark.scheduler.mode"))
+      .set("spark.driver.memory", "1g")
+      .set("spark.executor.memory", "1g")
 
     val spark = SparkSession
       .builder

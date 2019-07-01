@@ -9,8 +9,9 @@
     <testSourceDirectory>src/test/scala</testSourceDirectory>
     <plugins>
       <plugin>
-        <groupId>org.scala-tools</groupId>
-        <artifactId>maven-scala-plugin</artifactId>
+        <groupId>net.alchim31.maven</groupId>
+        <artifactId>scala-maven-plugin</artifactId>
+        <version>3.4.1</version>
       </plugin>
       <plugin>
         <artifactId>maven-shade-plugin</artifactId>
@@ -57,11 +58,40 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>net.alchim31.maven</groupId>
+        <artifactId>scala-maven-plugin</artifactId>
+        <version>3.4.1</version>
+        <executions>
+          <execution>
+            <id>scala-compile-first</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>add-source</goal>
+              <goal>compile</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>scala-test-compile</id>
+            <phase>process-test-resources</phase>
+            <goals>
+              <goal>testCompile</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <jvmArgs>
+            <jvmArg>-Xms64m</jvmArg>
+            <jvmArg>-Xmx1024m</jvmArg>
+            <jvmArg>-Xss2048K</jvmArg>
+          </jvmArgs>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
   <properties>
     <scala.version>2.11.12</scala.version>
     <scala.version.major>2.11</scala.version.major>
-    <spark.version>2.4.0</spark.version>
+    <spark.version>2.4.3</spark.version>
   </properties>
 </project>

@@ -38,8 +38,11 @@ object App {
     val src = spark.readStream.format("kafka").options(map).load()
     val result = src.selectExpr("cast(key as string) as key", "cast(value as string) as value").map(r=>(r(0).toString,r(1).toString)).as[(String,String)].map(x => {
 
+      //call SQL
+      val db = new SQLDBConnector(config)
+      val sim = db.select[SIM]( "select SIMNumber from tbl_sims where simid = 1",Array[Object]())
      SparkLogger.log.error(s"key:${x._1}, value:${x._2}")
-      KafkaMsg(key = x._1, value = x._2, topic =config.getString("kafka.streams.sparkApp.topicOut") )
+      KafkaMsg(key = x._1, value = x._2+" "+sim.head.SIMNumber, topic =config.getString("kafka.streams.sparkApp.topicOut") )
     }).toDF
 
     result.writeStream.format("kafka").option("kafka.bootstrap.servers",config.getString("kafka.servers"))
